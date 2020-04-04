@@ -1,8 +1,8 @@
-#include "chess.h"
+#include "ChessGame.h"
 
 using namespace std;
 
-void Board::printFigure(Figure* figure, Color fieldColor)
+void ChessGame::printFigure(Figure* figure, Color fieldColor)
 {
 	if (!figure)
 	{
@@ -14,8 +14,8 @@ void Board::printFigure(Figure* figure, Color fieldColor)
 	}
 }
 
-void Board::printGameBoard() {
-	
+void ChessGame::printGameBoard() {
+
 	cout << "   y: 0  1  2  3  4  5  6  7 " << endl << "x:" << endl;
 	for (int i = 0; i < 8; i++)
 	{
@@ -31,7 +31,7 @@ void Board::printGameBoard() {
 
 }
 
-string Board::getUserInput()
+string ChessGame::getUserInput()
 {
 	string coordinatesOfMoving;
 	(turn == WHITE) ? cout << "White's turn" << endl : cout << "Black's turn" << endl;
@@ -40,7 +40,7 @@ string Board::getUserInput()
 	return coordinatesOfMoving;
 }
 
-void Board::switchColorAtTheMoment()
+void ChessGame::switchColorAtTheMoment()
 {
 	if (colorAtTheMoment == BLACK)
 		colorAtTheMoment = WHITE;
@@ -48,7 +48,7 @@ void Board::switchColorAtTheMoment()
 		colorAtTheMoment = BLACK;
 }
 
-bool Board::isCoordinateInBoundsOfBoard(int coordinate)
+bool ChessGame::isCoordinateInBoundsOfBoard(int coordinate)
 {
 	if (coordinate < 0 || coordinate > 7)
 		return false;
@@ -56,7 +56,7 @@ bool Board::isCoordinateInBoundsOfBoard(int coordinate)
 	return true;
 }
 
-bool Board::isGameEnd(int sourceX, int sourceY, int destinationX, int destinationY)
+bool ChessGame::isGameEnd(int sourceX, int sourceY, int destinationX, int destinationY)
 {
 	King * castToKing = dynamic_cast<King*>(getField(destinationX, destinationY)->getFigure());
 
@@ -74,7 +74,7 @@ bool Board::isGameEnd(int sourceX, int sourceY, int destinationX, int destinatio
 	return false;
 }
 
-bool Board::canMoveKing(Field *source, Field * destination)
+bool ChessGame::canMoveKing(Field *source, Field * destination)
 {
 	//off board inputs should be handled elsewhere (before this)
 	//squares with same color should be handled elsewhere (before this)
@@ -89,7 +89,7 @@ bool Board::canMoveKing(Field *source, Field * destination)
 	return false;
 }
 
-bool Board::canMoveQueen(Field * source, Field * destination)
+bool ChessGame::canMoveQueen(Field * source, Field * destination)
 {
 	//off board inputs should be handled elsewhere (before this)
 	//squares with same color should be handled elsewhere (before this)
@@ -132,7 +132,7 @@ bool Board::canMoveQueen(Field * source, Field * destination)
 	return true;
 }
 
-bool Board::canMoveRook(Field * source, Field * destination)
+bool ChessGame::canMoveRook(Field * source, Field * destination)
 {
 	//off board inputs should be handled elsewhere (before this)
 	//squares with same color should be handled elsewhere (before this)
@@ -163,7 +163,7 @@ bool Board::canMoveRook(Field * source, Field * destination)
 	return true;
 }
 
-bool Board::canMoveBishop(Field* source, Field* destination)
+bool ChessGame::canMoveBishop(Field* source, Field* destination)
 {
 	//off board inputs should be handled elsewhere (before this)
 	//squares with same color should be handled elsewhere (before this)
@@ -184,7 +184,7 @@ bool Board::canMoveBishop(Field* source, Field* destination)
 	return true;
 }
 
-bool Board::canMoveKnight(Field *source, Field * destination)
+bool ChessGame::canMoveKnight(Field *source, Field * destination)
 {
 	//off board inputs should be handled elsewhere (before this)
 	//squares with same color should be handled elsewhere (before this)
@@ -197,7 +197,7 @@ bool Board::canMoveKnight(Field *source, Field * destination)
 		return false;
 }
 
-bool Board::canMovePawn(Field *source, Field * destination)
+bool ChessGame::canMovePawn(Field *source, Field * destination)
 {
 	//off board inputs should be handled elsewhere (before this)
 	//squares with same color should be handled elsewhere (before this)
@@ -233,7 +233,7 @@ bool Board::canMovePawn(Field *source, Field * destination)
 		return false;
 }
 
-bool Board::canMakeMove(int sourceX, int sourceY, int destinationX, int destinationY) 
+bool ChessGame::canMakeMove(int sourceX, int sourceY, int destinationX, int destinationY)
 {
 	//Checking for turns will be done previous to this
 	if (!isCoordinateInBoundsOfBoard(sourceX) || !isCoordinateInBoundsOfBoard(sourceY) || !isCoordinateInBoundsOfBoard(destinationX) ||
@@ -272,7 +272,7 @@ bool Board::canMakeMove(int sourceX, int sourceY, int destinationX, int destinat
 		return canMoveQueen(source, destination);
 }
 
-void Board::setGameBoard()
+void ChessGame::setGameBoard()
 {
 	fields[0][0].setFigureAndColor(new Rook(), WHITE);
 	fields[1][0].setFigureAndColor(new Knight(), WHITE);
@@ -312,7 +312,7 @@ void Board::setGameBoard()
 		}
 }
 
-void Board::moveFigure()
+void ChessGame::moveFigure()
 {
 	string coordinatesOfMoving;
 	int sourceX, sourceY, destinationX, destinationY;
@@ -353,7 +353,7 @@ void Board::moveFigure()
 	switchColorAtTheMoment();
 }
 
-void Board::playNextTurn()
+void ChessGame::playNextTurn()
 {
 	system("cls");
 	printGameBoard();
