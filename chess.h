@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include <cmath>
 #include "Figure.h"
 #include "King.h"
 #include "Queen.h"
@@ -71,29 +72,60 @@ public:
 
 class Board
 {
-	Field square[8][8];
-	Color turn = WHITE;
-
-	bool moveKing(Square* thisKing, Square* thatSpace);
-	bool moveQueen(Square* thisQueen, Square* thatSpace);
-	bool moveBishop(Square* thisBishop, Square* thatSpace);
-	bool moveKnight(Square* thisKnight, Square* thatSpace);
-	bool moveRook(Square* thisRook, Square* thatSpace);
-	bool movePawn(Square* thisPawn, Square* thatSpace);
-	bool makeMove(int x1, int y1, int x2, int y2);
-	void printBoard();
+	Field ** board;
+	bool isGamePlaying;
+	Color colorAtTheMoment;
 
 	void printFigure(Figure*, Color);
-public:
-	Square* getSquare(int x, int y) {
-		return &square[x][y];
-	}
-	void setSquare(Square * s, int x, int y) {
-		square[x][y] = *s;
-	}
-	bool doMove();
+	void printGameBoard();
+	string getUserInput();
+	void switchColorAtTheMoment();
+	bool isCoordinateInBoundsOfBoard(int);
+	bool isGameEnd(int, int, int, int);
+	bool canMoveKing(Field*, Field*);
+	bool canMoveQueen(Field*, Field*);
+	bool canMoveRook(Field*, Field*);
+	bool canMoveBishop(Field*, Field*);
+	bool canMoveKnight(Field*, Field*);
+	bool canMovePawn(Field*, Field*);
+	bool canMakeMove(int, int, int, int);
 
-	void setBoard();
-	bool playGame();
+	
+public:
+	ChessGame()
+	{
+		isGamePlaying = true;
+		colorAtTheMoment = WHITE;
+		board = new Field*[8];
+		for (int i = 0; i < 8; i++)
+		{
+			board[i] = new Field[8];
+		}
+
+	}
+	
+	Field* getField(int x, int y) 
+	{
+		return &board[x][y];
+	}
+
+	void setField(Field * field, int x, int y) 
+	{
+		board[x][y] = *field;
+	}
+	
+	~ChessGame()
+	{
+
+		for (int i = 0; i < 8; i++)
+		{
+			delete board[i];
+		}
+		delete[] board;
+	}
+
+	void setGameBoard();
+	void moveFigure();
+	void playNextTurn();
 };
 

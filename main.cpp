@@ -16,10 +16,11 @@ int main()
 
 	while(newgame)
 	{
-		b.setBoard();
+		
+		b.setGameBoard();
 		while (b.isGamePlaying)
 		{
-			b.playGame();
+			b.playNextTurn();
 		}
 		cout << "Do you want to play again? (y for yes, anything else for no) ";
 		cin >> s;
