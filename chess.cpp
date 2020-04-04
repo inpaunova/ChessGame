@@ -1,73 +1,31 @@
 #include "chess.h"
 
 
-Square::Square()
+using namespace std;
+
+void Board::printFigure(Figure* figure, Color fieldColor)
 {
-	piece = EMPTY;
-	color = NONE;
+	if (!figure)
+	{
+		cout << " " << "\21" << " ";
+	}
+	else
+	{
+		figure->printFigureAsLetter(fieldColor);
+	}
 }
-
-void Square::setSpace(Square* space)
-{
-	color = space->getColor();
-	piece = space->getPiece();
-}
-
-void Square::setEmpty()
-{
-	color = NONE;
-	piece = EMPTY;
-}
-
-Piece Square::getPiece()
-{
-	return piece;
-}
-
-Color Square::getColor()
-{
-	return color;
-}
-
-void Square::setPieceAndColor(Piece p, Color c)
-{
-	piece = p;
-	color = c;
-
-}
-
 
 void Board::printBoard() {
-	using namespace std;
+	
 	cout << "   y: 0  1  2  3  4  5  6  7 " << endl << "x:" << endl;
 	for (int i = 0; i < 8; i++)
 	{
 		cout << " " << i << "   ";
 		for (int j = 0; j < 8; j++)
 		{
-			Piece p = square[i][j].getPiece();
-			Color c = square[i][j].getColor();
-
-			switch (p)
-			{
-			case KING: (c == WHITE) ? cout << " K " : cout << " k ";
-				break;
-			case QUEEN: (c == WHITE) ? cout << " Q " : cout << " q ";
-				break;
-			case BISHOP:(c == WHITE) ? cout << " B " : cout << " b ";
-				break;
-			case KNIGHT:(c == WHITE) ? cout << " H " : cout << " h ";
-				break;
-			case ROOK: (c == WHITE) ? cout << " R " : cout << " r ";
-				break;
-			case PAWN: (c == WHITE) ? cout << " P " : cout << " p ";
-				break;
-			case EMPTY: cout << " " << "\21" << " ";
-				break;
-			default: cout << "XXX";
-				break;
-			}
-
+			Figure* figure = fields[i][j].getFigure();
+			Color fieldColor = fields[i][j].getColor();
+			printFigure(figure, fieldColor);
 		}
 		cout << endl;
 	}
@@ -127,34 +85,34 @@ bool Board::doMove() {
 
 void Board::setBoard()
 {
-	square[0][0].setPieceAndColor(ROOK, WHITE);
-	square[1][0].setPieceAndColor(KNIGHT, WHITE);
-	square[2][0].setPieceAndColor(BISHOP, WHITE);
-	square[3][0].setPieceAndColor(QUEEN, WHITE);
-	square[4][0].setPieceAndColor(KING, WHITE);
-	square[5][0].setPieceAndColor(BISHOP, WHITE);
-	square[6][0].setPieceAndColor(KNIGHT, WHITE);
-	square[7][0].setPieceAndColor(ROOK, WHITE);
+	square[0][0].setFigureAndColor(ROOK, WHITE);
+	square[1][0].setFigureAndColor(KNIGHT, WHITE);
+	square[2][0].setFigureAndColor(BISHOP, WHITE);
+	square[3][0].setFigureAndColor(QUEEN, WHITE);
+	square[4][0].setFigureAndColor(KING, WHITE);
+	square[5][0].setFigureAndColor(BISHOP, WHITE);
+	square[6][0].setFigureAndColor(KNIGHT, WHITE);
+	square[7][0].setFigureAndColor(ROOK, WHITE);
 
-	square[0][7].setPieceAndColor(ROOK, BLACK);
-	square[1][7].setPieceAndColor(KNIGHT, BLACK);
-	square[2][7].setPieceAndColor(BISHOP, BLACK);
-	square[3][7].setPieceAndColor(QUEEN, BLACK);
-	square[4][7].setPieceAndColor(KING, BLACK);
-	square[5][7].setPieceAndColor(BISHOP, BLACK);
-	square[6][7].setPieceAndColor(KNIGHT, BLACK);
-	square[7][7].setPieceAndColor(ROOK, BLACK);
+	square[0][7].setFigureAndColor(ROOK, BLACK);
+	square[1][7].setFigureAndColor(KNIGHT, BLACK);
+	square[2][7].setFigureAndColor(BISHOP, BLACK);
+	square[3][7].setFigureAndColor(QUEEN, BLACK);
+	square[4][7].setFigureAndColor(KING, BLACK);
+	square[5][7].setFigureAndColor(BISHOP, BLACK);
+	square[6][7].setFigureAndColor(KNIGHT, BLACK);
+	square[7][7].setFigureAndColor(ROOK, BLACK);
 
 	for (int i = 0; i < 8; i++)
 	{
-		square[i][1].setPieceAndColor(PAWN, WHITE);
-		square[i][6].setPieceAndColor(PAWN, BLACK);
+		square[i][1].setFigureAndColor(PAWN, WHITE);
+		square[i][6].setFigureAndColor(PAWN, BLACK);
 
 	}
 	for (int i = 2; i < 6; i++)
 	{
 		for (int j = 0; j < 8; j++)
-			square[j][i].setPieceAndColor(EMPTY, NONE);
+			square[j][i].setFigureAndColor(EMPTY, NONE);
 
 	}
 	for (int i = 0; i < 8; i++)
@@ -180,8 +138,8 @@ bool Board::moveKing(Square* thisKing, Square* thatSpace) {
 	if (abs(thatSpace->getX() - thisKing->getX()) == 1)
 		if (abs(thatSpace->getY() - thisKing->getY()) == 1)
 		{
-			thatSpace->setSpace(thisKing);
-			thisKing->setEmpty();
+			thatSpace->setField(thisKing);
+			thisKing->setEmptyField();
 			return true;
 		}
 		else return false;
@@ -241,15 +199,15 @@ bool Board::moveQueen(Square* thisQueen, Square* thatSpace) { //there might be p
 				}
 				else
 					return false;
-		//if()
+		
 	}
 
 
 
 	if (invalid == false)
 	{
-		thatSpace->setSpace(thisQueen);
-		thisQueen->setEmpty();
+		thatSpace->setField(thisQueen);
+		thisQueen->setEmptyField();
 		return true;
 	}
 	else
@@ -283,8 +241,8 @@ bool Board::moveBishop(Square* thisBishop, Square* thatSpace) { //there might be
 
 	if (invalid == false)
 	{
-		thatSpace->setSpace(thisBishop);
-		thisBishop->setEmpty();
+		thatSpace->setField(thisBishop);
+		thisBishop->setEmptyField();
 		return true;
 	}
 	else
@@ -303,8 +261,8 @@ bool Board::moveKnight(Square* thisKnight, Square* thatSpace)
 
 	if ((abs(knightX - thatX) == 2 && abs(knightY - thatY) == 1) || (abs(knightX - thatX) == 1 && abs(knightY - thatY) == 2))
 	{
-		thatSpace->setSpace(thisKnight);
-		thisKnight->setEmpty();
+		thatSpace->setField(thisKnight);
+		thisKnight->setEmptyField();
 		return true;
 	}
 	else
@@ -352,8 +310,8 @@ bool Board::moveRook(Square* thisRook, Square* thatSpace)
 	}
 	if (invalid == false)
 	{
-		thatSpace->setSpace(thisRook);
-		thisRook->setEmpty();
+		thatSpace->setField(thisRook);
+		thisRook->setEmptyField();
 		return true;
 	}
 	else
@@ -366,7 +324,7 @@ bool Board::moveRook(Square* thisRook, Square* thatSpace)
 bool Board::movePawn(Square* thisPawn, Square* thatSpace) {
 	//off board inputs should be handled elsewhere (before this)
 	//squares with same color should be handled elsewhere (before this)
-	using namespace std;
+	
 	bool invalid = false;
 	int pawnX = thisPawn->getX();
 	int pawnY = thisPawn->getY();
@@ -379,15 +337,15 @@ bool Board::movePawn(Square* thisPawn, Square* thatSpace) {
 
 		if (pawnX == thatX && thatY == pawnY + 1 && thatSpace->getColor() == NONE)
 		{
-			thatSpace->setSpace(thisPawn);
-			thisPawn->setEmpty();
+			thatSpace->setField(thisPawn);
+			thisPawn->setEmptyField();
 			return true;
 		}
 		else
 			if ((pawnX + 1 == thatX || pawnX - 1 == thatX) && pawnY + 1 == thatY  && thatSpace->getColor() == BLACK)
 			{
-				thatSpace->setSpace(thisPawn);
-				thisPawn->setEmpty();
+				thatSpace->setField(thisPawn);
+				thisPawn->setEmptyField();
 				return true;
 			}
 			else
@@ -398,15 +356,15 @@ bool Board::movePawn(Square* thisPawn, Square* thatSpace) {
 		{
 			if (pawnX == thatX && thatY == pawnY - 1 && thatSpace->getColor() == NONE)
 			{
-				thatSpace->setSpace(thisPawn);
-				thisPawn->setEmpty();
+				thatSpace->setField(thisPawn);
+				thisPawn->setEmptyField();
 				return true;
 			}
 			else
 				if ((pawnX + 1 == thatX || pawnX - 1 == thatX) && pawnY - 1 == thatY  && thatSpace->getColor() == WHITE)
 				{
-					thatSpace->setSpace(thisPawn);
-					thisPawn->setEmpty();
+					thatSpace->setField(thisPawn);
+					thisPawn->setEmptyField();
 					return true;
 				}
 				else
@@ -432,24 +390,25 @@ bool Board::makeMove(int x1, int y1, int x2, int y2) {
 		return false;
 	}
 
-	switch (src->getPiece())
-	{
-	case KING: return moveKing(src, dest);
-		break;
-	case QUEEN: return moveQueen(src, dest);
-		break;
-	case BISHOP: return moveBishop(src, dest);
-		break;
-	case KNIGHT: return moveKnight(src, dest);
-		break;
-	case ROOK: return moveRook(src, dest);
-		break;
-	case PAWN: return movePawn(src, dest);
-		break;
-	case EMPTY: std::cout << "You do not have a piece there" << std::endl;  return false;
-		break;
-	default: std::cerr << "Something went wrong in the switch statement in makeMove()" << std::endl;
-		break;
-	}
+	King * castToKing = dynamic_cast<King*>(source->getFigure());
+	Queen * castToQueen = dynamic_cast<Queen*>(source->getFigure());
+	Knight * castToKnight = dynamic_cast<Knight*>(source->getFigure());
+	Rook * castToRook = dynamic_cast<Rook*>(source->getFigure());
+	Bishop * castToBishop = dynamic_cast<Bishop*>(source->getFigure());
+	Pawn * castToPawn = dynamic_cast<Pawn*>(source->getFigure());
+
+	if (castToKing != nullptr)
+		return canMoveKing(source, destination);
+	if (castToQueen != nullptr)
+		return canMoveQueen(source, destination);
+	if (castToKnight != nullptr)
+		return canMoveKnight(source, destination);
+	if (castToRook != nullptr)
+		return canMoveRook(source, destination);
+	if (castToBishop != nullptr)
+		return canMoveKing(source, destination);
+	if (castToPawn != nullptr)
+		return canMoveQueen(source, destination);
+
 	return false;
 }

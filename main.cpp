@@ -4,13 +4,9 @@
 
 using namespace std;
 
-
-
-
-
 int main()
 {
-	Board b;
+	ChessGame b;
 	string s;
 	bool newgame = true;
 	cout << "   _____ _    _ ______  _____ _____ \n  / ____| |  | |  ____|/ ____/ ____| \n | |    | |__| | |__  | (___| (___  \n | |    |  __  |  __|  \\___  \\___ \\ \n | |____| |  | | |____ ____) |___) | \n  \\_____|_|  |_|______|_____/_____/ \n" << endl;
@@ -18,9 +14,13 @@ int main()
 	cout << "Enter any key to continue" << endl;
 	cin >> s;
 
-	while(newgame){
+	while(newgame)
+	{
 		b.setBoard();
-		while (b.playGame());
+		while (b.isGamePlaying)
+		{
+			b.playGame();
+		}
 		cout << "Do you want to play again? (y for yes, anything else for no) ";
 		cin >> s;
 		if (s != "y")
