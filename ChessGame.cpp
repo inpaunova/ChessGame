@@ -10,7 +10,7 @@ void ChessGame::printFigure(Figure* figure, Color fieldColor)
 	}
 	else
 	{
-		figure->printFigureAsLetter(fieldColor);
+		figure->printAsLetter(fieldColor);
 	}
 }
 
@@ -40,6 +40,25 @@ string ChessGame::getUserInput()
 	return coordinatesOfMoving;
 }
 
+Color ** ChessGame::takeCurrentColorsOfBoard()
+{
+	Color **fieldsColors = new Color*[8];
+	for (int i = 0; i < 8; i++)
+	{
+		fieldsColors[i] = new Color[8];
+	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			fieldsColors[i][j] = fields[i][j].getColor();
+		}
+	}
+
+	return fieldsColors;
+}
+
 void ChessGame::switchColorAtTheMoment()
 {
 	if (colorAtTheMoment == BLACK)
@@ -47,6 +66,7 @@ void ChessGame::switchColorAtTheMoment()
 	else
 		colorAtTheMoment = BLACK;
 }
+
 
 bool ChessGame::isCoordinateInBoundsOfBoard(int coordinate)
 {
@@ -58,9 +78,8 @@ bool ChessGame::isCoordinateInBoundsOfBoard(int coordinate)
 
 bool ChessGame::isGameEnd(int sourceX, int sourceY, int destinationX, int destinationY)
 {
-	King * castToKing = dynamic_cast<King*>(getField(destinationX, destinationY)->getFigure());
-
-	if (castToKing != nullptr)
+	if (getField(destinationX, destinationY)->getFigure()->isKing())
+	{
 		if (getField(sourceX, sourceY)->getColor() == WHITE)
 		{
 			cout << "WHITE WINS" << endl;
@@ -71,166 +90,23 @@ bool ChessGame::isGameEnd(int sourceX, int sourceY, int destinationX, int destin
 			cout << "BLACK WINS" << endl;
 			return true;
 		}
-	return false;
-}
-
-bool ChessGame::canMoveKing(Field *source, Field * destination)
-{
-	//off board inputs should be handled elsewhere (before this)
-	//squares with same color should be handled elsewhere (before this)
-	if (abs(destination->getX() - source->getX()) == 1)
-	{
-		if (abs(destination->getY() - source->getY()) == 1)
-		{
-			return true;
-		}
-		else return false;
 	}
 	return false;
 }
 
-bool ChessGame::canMoveQueen(Field * source, Field * destination)
+
+
+bool ChessGame::canMoveFigure(Field * source, Field * destination)
 {
-	//off board inputs should be handled elsewhere (before this)
-	//squares with same color should be handled elsewhere (before this)
-	int yIncrement;
-	int xIncrement;
-	if (source->getX() != destination->getX() || source->getY() != destination->getY())
+	Color ** fieldsColors = takeCurrentColorsOfBoard();
+	bool canMoveCurrentFigure = source->getFigure()->canMove(fieldsColors, 
+		source->getX(), source->getY(), destination->getX(), destination->getY());
+	for (int i = 0; i < 8; i++)
 	{
-		if (source->getX() == destination->getX())
-		{
-			yIncrement = (destination->getY() - source->getY()) / (abs(destination->getY() - source->getY()));
-			for (int i = source->getY() + yIncrement; i != destination->getY(); i += yIncrement)
-			{
-				if (board[destination->getX()][i].getColor() != NONE)
-					return false;
-			}
-		}
-		else if (source->getY() == destination->getY())
-		{
-			xIncrement = (destination->getX() - source->getX()) / (abs(destination->getX() - source->getX()));
-			for (int i = source->getX() + xIncrement; i != destination->getX(); i += xIncrement)
-			{
-				if (board[i][destination->getY()].getColor() != NONE)
-					return false;
-			}
-		}
-		else if (abs(source->getX() - destination->getX()) == abs(source->getY() - destination->getY()))
-		{
-			xIncrement = (destination->getX() - source->getX()) / (abs(destination->getX() - source->getX()));
-			yIncrement = (destination->getY() - source->getY()) / (abs(destination->getY() - source->getY()));
-			for (int i = 1; i < abs(source->getX() - destination->getX()); i++)
-			{
-				cout << "It got here somehow";
-				if (board[source->getX() + xIncrement * i][source->getY() + yIncrement * i].getColor() != NONE)
-					return false;
-			}
-		}
-		else
-			return false;
+		delete fieldsColors[i];
 	}
-	return true;
-}
-
-bool ChessGame::canMoveRook(Field * source, Field * destination)
-{
-	//off board inputs should be handled elsewhere (before this)
-	//squares with same color should be handled elsewhere (before this)
-	if (source->getX() != destination->getX() || source->getY() != destination->getY())
-	{
-		if (source->getX() == destination->getX())
-		{
-			int yIncrement = (destination->getY() - source->getY()) / (abs(destination->getY() - source->getY()));
-			for (int i = source->getY() + yIncrement; i != destination->getY(); i += yIncrement)
-			{
-
-				if (board[destination->getX()][i].getColor() != NONE)
-					return false;
-			}
-		}
-		else if (source->getY() == destination->getY())
-		{
-			int xIncrement = (destination->getX() - source->getX()) / (abs(destination->getX() - source->getX()));
-			for (int i = source->getX() + xIncrement; i != destination->getX(); i += xIncrement)
-			{
-				if (board[i][destination->getY()].getColor() != NONE)
-					return false;
-			}
-		}
-		else
-			return false;
-	}
-	return true;
-}
-
-bool ChessGame::canMoveBishop(Field* source, Field* destination)
-{
-	//off board inputs should be handled elsewhere (before this)
-	//squares with same color should be handled elsewhere (before this)
-	if (abs(source->getX() - destination->getX()) == abs(source->getY() - destination->getY()))
-	{
-		int xIncrement = (destination->getX() - source->getX()) / (abs(destination->getX() - source->getX()));
-		int yIncrement = (destination->getY() - source->getY()) / (abs(destination->getY() - source->getY()));
-
-		for (int i = 1; i < abs(source->getX() - destination->getX()); i++)
-		{
-			cout << "It got here somehow!";
-			if (board[source->getX() + xIncrement * i][source->getY() + yIncrement * i].getColor() != NONE)
-				return false;
-		}
-	}
-	else return false;
-
-	return true;
-}
-
-bool ChessGame::canMoveKnight(Field *source, Field * destination)
-{
-	//off board inputs should be handled elsewhere (before this)
-	//squares with same color should be handled elsewhere (before this)
-	if ((abs(source->getX() - destination->getX()) == 2 && abs(source->getY() - destination->getY()) == 1) ||
-		(abs(source->getX() - destination->getX()) == 1 && abs(source->getY() - destination->getY()) == 2))
-	{
-		return true;
-	}
-	else
-		return false;
-}
-
-bool ChessGame::canMovePawn(Field *source, Field * destination)
-{
-	//off board inputs should be handled elsewhere (before this)
-	//squares with same color should be handled elsewhere (before this)
-	if (source->getColor() == WHITE)
-	{
-		if (source->getX() == destination->getX() && destination->getY() == source->getY() + 1 && destination->getColor() == NONE)
-		{
-			return true;
-		}
-		else if ((source->getX() + 1 == destination->getX() || source->getX() - 1 == destination->getX()) &&
-			source->getY() + 1 == destination->getY() && destination->getColor() == BLACK)
-		{
-			return true;
-		}
-		else
-			return false;
-	}
-	else if (source->getColor() == BLACK)
-	{
-		if (source->getX() == destination->getX() && destination->getY() == source->getY() - 1 && destination->getColor() == NONE)
-		{
-			return true;
-		}
-		else if ((source->getX() + 1 == destination->getX() || source->getX() - 1 == destination->getX()) &&
-			source->getY() - 1 == destination->getY() && destination->getColor() == WHITE)
-		{
-			return true;
-		}
-		else
-			return false;
-	}
-	else
-		return false;
+	delete[] fieldsColors;
+	return canMoveCurrentFigure;
 }
 
 bool ChessGame::canMakeMove(int sourceX, int sourceY, int destinationX, int destinationY)
@@ -251,25 +127,7 @@ bool ChessGame::canMakeMove(int sourceX, int sourceY, int destinationX, int dest
 		return false;
 	}
 
-	King * castToKing = dynamic_cast<King*>(source->getFigure());
-	Queen * castToQueen = dynamic_cast<Queen*>(source->getFigure());
-	Knight * castToKnight = dynamic_cast<Knight*>(source->getFigure());
-	Rook * castToRook = dynamic_cast<Rook*>(source->getFigure());
-	Bishop * castToBishop = dynamic_cast<Bishop*>(source->getFigure());
-	Pawn * castToPawn = dynamic_cast<Pawn*>(source->getFigure());
-
-	if (castToKing != nullptr)
-		return canMoveKing(source, destination);
-	if (castToQueen != nullptr)
-		return canMoveQueen(source, destination);
-	if (castToKnight != nullptr)
-		return canMoveKnight(source, destination);
-	if (castToRook != nullptr)
-		return canMoveRook(source, destination);
-	if (castToBishop != nullptr)
-		return canMoveKing(source, destination);
-	if (castToPawn != nullptr)
-		return canMoveQueen(source, destination);
+	return source->getFigure()->canMoveFigure(source, destination);
 }
 
 void ChessGame::setGameBoard()

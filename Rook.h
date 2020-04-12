@@ -4,12 +4,12 @@
 class Rook : public Figure
 {
 public:
-	virtual void printFigureAsLetter(Color fieldColor)
+	virtual void printAsLetter(Color fieldColor)
 	{
 		(fieldColor == WHITE) ? cout << " R " : cout << " r ";
 	}
 
-	bool canMoveFigure(Color** fieldsColors, int sourceX, int sourceY, int destinationX, int destinationY)
+	bool canMove(Color** fieldsColors, int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		//off board inputs should be handled elsewhere (before this)
 		//squares with same color should be handled elsewhere (before this)

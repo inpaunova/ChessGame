@@ -7,15 +7,11 @@ class ChessGame
 	void printFigure(Figure*, Color);
 	void printGameBoard();
 	string getUserInput();
+	Color** takeCurrentColorsOfBoard();
 	void switchColorAtTheMoment();
 	bool isCoordinateInBoundsOfBoard(int);
 	bool isGameEnd(int, int, int, int);
-	bool canMoveKing(Field*, Field*);
-	bool canMoveQueen(Field*, Field*);
-	bool canMoveRook(Field*, Field*);
-	bool canMoveBishop(Field*, Field*);
-	bool canMoveKnight(Field*, Field*);
-	bool canMovePawn(Field*, Field*);
+	bool canMoveFigure(Field*, Field*);
 	bool canMakeMove(int, int, int, int);
 
 

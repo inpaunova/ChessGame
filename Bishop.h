@@ -4,12 +4,12 @@
 class Bishop : public Figure
 {
 public:
-	virtual void printFigureAsLetter(Color fieldColor) override
+	virtual void printAsLetter(Color fieldColor) override
 	{
 		(fieldColor == WHITE) ? cout << " B " : cout << " b ";
 	}
 
-	virtual bool canMoveFigure(Color ** fieldsColors, int sourceX, int sourceY, int destinationX, int destinationY)
+	virtual bool canMove(Color ** fieldsColors, int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		//off board inputs should be handled elsewhere (before this)
 		//squares with same color should be handled elsewhere (before this)
