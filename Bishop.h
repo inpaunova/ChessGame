@@ -3,33 +3,39 @@
 
 class Bishop : public Figure
 {
-public:
-	virtual void printAsLetter(Color fieldColor) override
+	bool canMoveDiagonally(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
 	{
-		(fieldColor == WHITE) ? cout << " B " : cout << " b ";
+		if (abs(sourceX - destinationX) == abs(sourceY - destinationY))
+		{
+			int moveStepByX = (destinationX - sourceX) / (abs(destinationX - sourceX));
+			int moveStepByY = (destinationY - sourceY) / (abs(destinationY - sourceY));
+
+			int xCoordinate, yCoordinate;
+			for (int i = 1; i < abs(sourceX - destinationX); i++)
+			{
+				xCoordinate = sourceX + xIncrement * i;
+				yCoordinate = sourceY + yIncrement * i;
+				if (fieldsColorsOfFiguresOnBoard[xCoordinate][yCoordinate] != NONE)
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
+public:
+	virtual void printAsLetter(Color fieldColorOfFigure) override
+	{
+		(fieldColorOfFigure == WHITE) ? cout << " B " : cout << " b ";
 	}
 
-	virtual bool canMove(Color ** fieldsColors, int sourceX, int sourceY, int destinationX, int destinationY)
+	virtual bool canMove(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		//off board inputs should be handled elsewhere (before this)
 		//squares with same color should be handled elsewhere (before this)
-		if (abs(sourceX - destinationX) == abs(sourceY - destinationY))
-		{
-			int xIncrement = (destinationX - sourceX) / (abs(destinationX - sourceX));
-			int yIncrement = (destinationY - sourceY) / (abs(destinationY - sourceY));
-
-			for (int i = 1; i < abs(sourceX - destinationX); i++)
-			{
-				cout << "It got here somehow!";
-				if (fieldsColors[sourceX + xIncrement * i][sourceY + yIncrement * i] != NONE)
-					return false;
-
-			}
-		}
+		if (canMoveDiagonally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY))
+			return true;
 		else
-			return false;
-
-		return true;
+			return fale;
 	}
 
 	virtual bool isKing()
