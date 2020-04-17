@@ -51,7 +51,7 @@ public:
 		//squares with same color should be handled elsewhere (before this)
 		if (canMoveHorizontally(sourceX, sourceY, destinationX, destinationY) ||
 			canMoveVertically(sourceX, sourceY, destinationX, destinationY) ||
-			canMoveVertically(sourceX, sourceY, destinationX, destinationY))
+			canMoveDiagonally(sourceX, sourceY, destinationX, destinationY))
 		{
 			return true;
 		}

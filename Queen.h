@@ -63,7 +63,7 @@ public:
 		//squares with same color should be handled elsewhere (before this)
 		if (canMoveHorizontally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY) ||
 			canMoveVertically(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY) ||
-			canMoveVertically(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY))
+			canMoveDiagonally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY))
 		{
 			return true;
 		}
