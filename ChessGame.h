@@ -1,9 +1,13 @@
 class ChessGame
 {
+	const int BOARD_SIZE = 8;
 	Field ** board;
 	bool isGamePlaying;
 	Color colorAtTheMoment;
 
+	void setEmptyFields();
+	void setPawnsOnFields();
+	void setFieldCoordinates();
 	void printFigure(Figure*, Color);
 	void printGameBoard();
 	string getUserInput();
@@ -20,10 +24,10 @@ public:
 	{
 		isGamePlaying = true;
 		colorAtTheMoment = WHITE;
-		board = new Field*[8];
-		for (int i = 0; i < 8; i++)
+		board = new Field*[BOARD_SIZE];
+		for (int i = 0; i < BOARD_SIZE; i++)
 		{
-			board[i] = new Field[8];
+			board[i] = new Field[BOARD_SIZE];
 		}
 
 	}
@@ -40,7 +44,7 @@ public:
 
 	~ChessGame()
 	{
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < BOARD_SIZE; i++)
 		{
 			delete board[i];
 		}

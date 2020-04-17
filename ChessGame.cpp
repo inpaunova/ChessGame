@@ -2,6 +2,39 @@
 
 using namespace std;
 
+void ChessGame::setEmptyFields()
+{
+	for (int i = 2; i < 6; i++)
+	{
+		for (int j = 0; j < BOARD_SIZE; j++)
+		{
+			fields[j][i].setFigureAndColor(nullptr, NONE);
+		}
+	}
+}
+
+void ChessGame::setPawnsOnFields()
+{
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		fields[i][1].setFigureAndColor(new Pawn(), WHITE);
+		fields[i][6].setFigureAndColor(new Pawn(), BLACK);
+	}
+
+}
+
+void ChessGame::setFieldCoordinates()
+{
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		for (int j = 0; j < BOARD_SIZE; j++)
+		{
+			fields[i][j].setX(i);
+			fields[i][j].setY(j);
+		}
+	}
+}
+
 void ChessGame::printFigure(Figure* figure, Color fieldColor)
 {
 	if (!figure)
@@ -17,10 +50,10 @@ void ChessGame::printFigure(Figure* figure, Color fieldColor)
 void ChessGame::printGameBoard() {
 
 	cout << "   y: 0  1  2  3  4  5  6  7 " << endl << "x:" << endl;
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < BOARD_SIZE; i++)
 	{
 		cout << " " << i << "   ";
-		for (int j = 0; j < 8; j++)
+		for (int j = 0; j < BOARD_SIZE; j++)
 		{
 			Figure* figure = fields[i][j].getFigure();
 			Color fieldColor = fields[i][j].getColor();
@@ -42,15 +75,15 @@ string ChessGame::getUserInput()
 
 Color ** ChessGame::takeCurrentColorsOfBoard()
 {
-	Color **fieldsColors = new Color*[8];
-	for (int i = 0; i < 8; i++)
+	Color **fieldsColors = new Color*[BOARD_SIZE];
+	for (int i = 0; i < BOARD_SIZE; i++)
 	{
-		fieldsColors[i] = new Color[8];
+		fieldsColors[i] = new Color[BOARD_SIZE];
 	}
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < BOARD_SIZE; i++)
 	{
-		for (int j = 0; j < 8; j++)
+		for (int j = 0; j < BOARD_SIZE; j++)
 		{
 			fieldsColors[i][j] = fields[i][j].getColor();
 		}
@@ -70,7 +103,9 @@ void ChessGame::switchColorAtTheMoment()
 
 bool ChessGame::isCoordinateInBoundsOfBoard(int coordinate)
 {
-	if (coordinate < 0 || coordinate > 7)
+	const int SMALLEST_COORDINATE = 0;
+	const int LARGEST_COORDINATE = 7;
+	if (coordinate < SMALLEST_COORDINATE || coordinate > LARGEST_COORDINATE)
 		return false;
 
 	return true;
@@ -85,7 +120,7 @@ bool ChessGame::isGameEnd(int sourceX, int sourceY, int destinationX, int destin
 			cout << "WHITE WINS" << endl;
 			return true;
 		}
-		else
+		else 
 		{
 			cout << "BLACK WINS" << endl;
 			return true;
@@ -99,9 +134,11 @@ bool ChessGame::isGameEnd(int sourceX, int sourceY, int destinationX, int destin
 bool ChessGame::canMoveFigure(Field * source, Field * destination)
 {
 	Color ** fieldsColors = takeCurrentColorsOfBoard();
+
 	bool canMoveCurrentFigure = source->getFigure()->canMove(fieldsColors, 
 		source->getX(), source->getY(), destination->getX(), destination->getY());
-	for (int i = 0; i < 8; i++)
+
+	for (int i = 0; i < BOARD_SIZE; i++)
 	{
 		delete fieldsColors[i];
 	}
@@ -150,39 +187,24 @@ void ChessGame::setGameBoard()
 	fields[6][7].setFigureAndColor(new Knight(), BLACK);
 	fields[7][7].setFigureAndColor(new Rook(), BLACK);
 
-	for (int i = 0; i < 8; i++)
-	{
-		fields[i][1].setFigureAndColor(new Pawn(), WHITE);
-		fields[i][6].setFigureAndColor(new Pawn(), BLACK);
-	}
-
-	for (int i = 2; i < 6; i++)
-	{
-		for (int j = 0; j < 8; j++)
-			fields[j][i].setFigureAndColor(nullptr, NONE);
-	}
-
-	for (int i = 0; i < 8; i++)
-		for (int j = 0; j < 8; j++)
-		{
-			fields[i][j].setX(i);
-			fields[i][j].setY(j);
-		}
+	setPawnsOnFields();
+	setEmptyFields();
+	setFieldCoordinates();
 }
 
 void ChessGame::moveFigure()
 {
 	string coordinatesOfMoving;
 	int sourceX, sourceY, destinationX, destinationY;
-	bool doesGameStop = false;
-	while (!doesGameStop)
+	bool isFigureMoved = false;
+	while (!isFigureMoved)
 	{
 		coordinatesOfMoving = getUserInput();
-
-		sourceX = coordinatesOfMoving[0] - 48;
-		sourceY = coordinatesOfMoving[1] - 48;
-		destinationX = coordinatesOfMoving[2] - 48;
-		destinationY = coordinatesOfMoving[3] - 48;
+		
+		sourceX = coordinatesOfMoving[0];
+		sourceY = coordinatesOfMoving[1];
+		destinationX = coordinatesOfMoving[2];
+		destinationY = coordinatesOfMoving[3];
 
 		if (getField(sourceX, sourceY)->getColor() == colorAtTheMoment)
 		{
@@ -192,22 +214,23 @@ void ChessGame::moveFigure()
 			}
 			else
 			{
+				if (isGameEnd(sourceX, sourceY, destinationX, destinationY))
+				{
+					isGamePlaying = false;
+					return;
+				}
 				Field* source = getField(sourceX, sourceY);
 				Field* destination = getField(destinationX, destinationY);
 				destination->setField(source);
 				source->setEmptyField();
-				doesGameStop = true;
+				isFigureMoved = true;
 			}
 
 		}
 		else
 			cout << "That's not your piece. Try again." << endl;
 	}
-	if (isGameEnd(sourceX, sourceY, destinationX, destinationY))
-	{
-		isGamePlaying = false;
-		return;
-	}
+	
 	switchColorAtTheMoment();
 }
 
