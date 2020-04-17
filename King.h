@@ -31,7 +31,7 @@ class King : public Figure
 	{
 		if (abs(destinationX - sourceX) == 1)
 		{
-			if (abs(abs(destinationY - sourceY) == 1) == 1)
+			if (abs(destinationY - sourceY) == 1)
 			{
 				return true;
 			}
