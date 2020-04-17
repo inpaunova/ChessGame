@@ -3,18 +3,27 @@
 
 class Knight : public Figure
 {
+	
 public:
-	virtual void printAsLetter(Color fieldColor)
+	virtual void printAsLetter(Color fieldColorOfFigure)
 	{
-		(fieldColor == WHITE) ? cout << " H " : cout << " h ";
+		(fieldColorOfFigure == WHITE) ? cout << " H " : cout << " h ";
 	}
 
-	virtual bool canMove(Color ** fieldsColors, int sourceX, int sourceY, int destinationX, int destinationY)
+	virtual bool canMove(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		//off board inputs should be handled elsewhere (before this)
 		//squares with same color should be handled elsewhere (before this)
-		if ((abs(sourceX - destinationX) == 2 && abs(sourceY - destinationY) == 1) ||
-			(abs(sourceX - destinationX) == 1 && abs(sourceY - destinationY) == 2))
+
+		bool ifDifferenceByXIsTwo = abs(sourceX - destinationX) == 2;
+		bool ifDifferenceByYIsTwo = abs(sourceY - destinationY) == 2;
+		bool ifDifferenceByXIsOne = abs(sourceX - destinationX) == 1;
+		bool ifDifferenceByYIsOne = abs(sourceY - destinationY) == 1;
+
+		bool canMoveHorizontally = ifDifferenceByXIsOne && ifDifferenceByYIsTwo;
+		bool canMoveVertically = ifDifferenceByXIsTwo && ifDifferenceByYIsOne;
+
+		if (canMoveHorizontally || canMoveVertically)
 		{
 			return true;
 		}
