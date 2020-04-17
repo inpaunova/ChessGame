@@ -49,8 +49,8 @@ public:
 	{
 		//off board inputs should be handled elsewhere (before this)
 		//squares with same color should be handled elsewhere (before this)
-		if (canMoveHorizontally(sourceX, sourceY, destinationX, destinationY) &&
-			canMoveVertically(sourceX, sourceY, destinationX, destinationY) &&
+		if (canMoveHorizontally(sourceX, sourceY, destinationX, destinationY) ||
+			canMoveVertically(sourceX, sourceY, destinationX, destinationY) ||
 			canMoveVertically(sourceX, sourceY, destinationX, destinationY))
 		{
 			return true;
