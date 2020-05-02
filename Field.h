@@ -11,26 +11,14 @@
 
 class Field
 {
-	Figure* figure;
-	Color color;
-	int x, y;
+
 public:
 	Field()
 	{
 		figure = nullptr;
 		color = NONE;
-	}
-
-	void setField(Field* field)
-	{
-		color = field->getColor();
-		figure = field->getFigure();
-	}
-
-	void setEmptyField()
-	{
-		color = NONE;
-		figure = nullptr;
+		xCoordinate = -1;
+		yCoordinate = -1;
 	}
 
 	void setFigureAndColor(Figure* figure, Color color)
@@ -39,7 +27,29 @@ public:
 		this->color = color;
 	}
 
-	Color getColor()
+	void setXcoordinate(int xCoordinate)
+	{
+		this->xCoordinate = xCoordinate;
+	}
+
+	void setYcoordinate(int yCoordinate)
+	{
+		this->yCoordinate = yCoordinate;
+	}
+
+	void setEmptyField()
+	{
+		color = NONE;
+		figure = nullptr;
+	}
+
+	void setField(Field* field)
+	{
+		color = field->getColor();
+		figure = field->getFigure();
+	}
+
+	Colors getColor()
 	{
 		return color;
 	}
@@ -49,23 +59,19 @@ public:
 		return figure;
 	}
 
-	void setX(int x)
+	int getXCoordinate()
 	{
-		this->x = x;
+		return xCoordinate;
 	}
 
-	void setY(int y)
+	int getYCoordinate()
 	{
-		this->y = y;
+		return yCoordinate;
 	}
 
-	int getX()
-	{
-		return x;
-	}
+private:
+	Figure* figure;
+	Colors color;
+	int xCoordinate, yCoordinate;
 
-	int getY()
-	{
-		return y;
-	}
 };
