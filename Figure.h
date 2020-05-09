@@ -13,7 +13,7 @@ public:
 		{
 			for (int y = 0; y < PLAYING_BOARD_SIZE; y++)
 			{
-				colorsOfFiguresOnTheBoard[x][y] = fieldColors[x][y];
+				colorsOfBoardFigures[x][y] = fieldColors[x][y];
 			}
 		}
 	}

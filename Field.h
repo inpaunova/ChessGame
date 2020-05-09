@@ -59,12 +59,12 @@ public:
 		return figure;
 	}
 
-	int getXCoordinate()
+	int getXcoordinate()
 	{
 		return xCoordinate;
 	}
 
-	int getYCoordinate()
+	int getYcoordinate()
 	{
 		return yCoordinate;
 	}
