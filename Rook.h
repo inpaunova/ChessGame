@@ -42,7 +42,7 @@ private:
 
 	bool canMoveVertically(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
-		if (sourceX != destinationY && sourceY == destinationY)
+		if (sourceX != destinationX && sourceY == destinationY)
 		{
 			int moveStep = (destinationX - sourceX) / (abs(destinationX - sourceX));
 			for (int x = sourceX + moveStep; x != destinationX; x += moveStep)
