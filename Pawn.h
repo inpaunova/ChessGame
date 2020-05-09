@@ -86,7 +86,7 @@ private:
 		bool areYCoordinatesAdjacent = destinationY == sourceY - 1;
 		bool isDestinationFieldWhite = colorsOfBoardFigures[destinationX][destinationY] == WHITE;
 
-		if (colorsOfBoardFigures[sourceX][sourceY] == WHITE)
+		if (colorsOfBoardFigures[sourceX][sourceY] == BLACK)
 		{
 			if (areXCoordinatesAdjacent && areYCoordinatesAdjacent && isDestinationFieldWhite)
 			{
