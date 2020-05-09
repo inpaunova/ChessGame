@@ -119,6 +119,16 @@ bool Board::isCoordinateInBoundsOfBoard(int coordinate)
 	return true;
 }
 
+bool Board::hasFigureOnField(int x, int y)
+{
+	return getField(x, y)->getFigure();
+}
+
+bool Board::hasKingOnField(int x, int y)
+{
+	return getField(x, y)->getFigure()->isKing();
+}
+
 Field * Board::getField(int x, int y)
 {
 	return &fields[x][y];

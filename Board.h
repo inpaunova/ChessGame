@@ -11,6 +11,8 @@ public:
 
 	bool isCoordinateInBoundsOfBoard(int);
 
+	bool hasFigureOnField(int, int);
+	bool hasKingOnField(int, int);
 	Field* getField(int, int);
 	void setField(Field *, int, int);
 	int getSize();

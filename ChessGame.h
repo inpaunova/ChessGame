@@ -4,29 +4,28 @@
 class ChessGame
 {
 public:
-	Board board;
-	bool isGamePlaying;
-	
 	ChessGame()
 	{
 		isGamePlaying = true;
 		colorAtTheMoment = WHITE;
 	}
 
-	void moveFigure();
+	void play();
 	void playNextTurn();
-	
+	void makeOneMove();
+
 private:
+	Board board;
 	Colors colorAtTheMoment;
+	bool isGamePlaying;
 
 	string getUserInput();
-
-	void switchColorAtTheMoment();
-	bool isGameEnd(int, int, int, int);
+	bool isPlayerFigure(int, int);
 	bool canMakeMove(int, int, int, int);
+	void moveFigure(int, int, int, int);
+	void switchColorAtTheMoment();
 	bool canMoveFigure(Field*, Field*);
-	
+	bool isGameEnd(int, int, int, int);
 };
-
 
 
