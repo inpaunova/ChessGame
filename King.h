@@ -3,7 +3,31 @@
 
 class King : public Figure
 {
-	bool canMoveHorizontally(sourceX, sourceY, destinationX, destinationY)
+public:
+	virtual bool canMove(int sourceX, int sourceY, int destinationX, int destinationY)
+	{
+
+		if (canMoveHorizontally(sourceX, sourceY, destinationX, destinationY) ||
+			canMoveVertically(sourceX, sourceY, destinationX, destinationY) ||
+			canMoveDiagonally(sourceX, sourceY, destinationX, destinationY))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	virtual void printAsLetter(Colors colorOfTheFigure)
+	{
+		(colorOfTheFigure == WHITE) ? cout << " K " : cout << " k ";
+	}
+
+	virtual bool isKing()
+	{
+		return true;
+	}
+
+private:
+	bool canMoveHorizontally(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		if (sourceX == destinationX)
 		{
@@ -15,7 +39,7 @@ class King : public Figure
 		return false;
 	}
 
-	bool canMoveVertically(sourceX, sourceY, destinationX, destinationY)
+	bool canMoveVertically(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		if (sourceY == destinationY)
 		{
@@ -27,7 +51,7 @@ class King : public Figure
 		return false;
 	}
 
-	bool canMoveDiagonally(sourceX, sourceY, destinationX, destinationY)
+	bool canMoveDiagonally(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		if (abs(destinationX - sourceX) == 1)
 		{
@@ -37,29 +61,5 @@ class King : public Figure
 			}
 		}
 		return false;
-	}
-
-public:
-	virtual void printAsLetter(Color fieldColorOfFigure)
-	{
-		(fieldColorOfFigure == WHITE) ? cout << " K " : cout << " k ";
-	}
-
-	virtual bool canMove(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
-	{
-		//off board inputs should be handled elsewhere (before this)
-		//squares with same color should be handled elsewhere (before this)
-		if (canMoveHorizontally(sourceX, sourceY, destinationX, destinationY) ||
-			canMoveVertically(sourceX, sourceY, destinationX, destinationY) ||
-			canMoveDiagonally(sourceX, sourceY, destinationX, destinationY))
-		{
-			return true;
-		}
-		return false;
-	}
-
-	virtual bool isKing()
-	{
-		return true;
 	}
 };

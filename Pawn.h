@@ -3,14 +3,41 @@
 
 class Pawn : public Figure
 {
-	bool canMoveWhitePawnHorizontally(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
+public:
+	virtual bool canMove(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
-		
+
+		bool canMoveHorizontally = canMoveWhitePawnHorizontally(sourceX, sourceY, destinationX, destinationY) ||
+			canMoveBlackPawnHorizontally(sourceX, sourceY, destinationX, destinationY);
+
+		bool canMoveDiagonally = canMoveWhitePawnDiagonally(sourceX, sourceY, destinationX, destinationY) ||
+			canMoveBlackPawnDiagonally(sourceX, sourceY, destinationX, destinationY);
+
+		if (canMoveHorizontally || canMoveDiagonally)
+			return true;
+		else
+			return false;
+	}
+
+	virtual void printAsLetter(Colors colorOfTheFigure)
+	{
+		(colorOfTheFigure == WHITE) ? cout << " P " : cout << " p ";
+	}
+
+	virtual bool isKing()
+	{
+		return false;
+	}
+
+private:
+	bool canMoveWhitePawnHorizontally(int sourceX, int sourceY, int destinationX, int destinationY)
+	{
+
 		bool ifXCoordinatesMatch = sourceX == destinationX;
 		bool areYCoordinatesAdjacent = destinationY == sourceY + 1;
-		bool isdestinationFieldEmpty = fieldsColorsOfFiguresOnBoard[destinationX][destinationY] == NONE;
+		bool isdestinationFieldEmpty = colorsOfBoardFigures[destinationX][destinationY] == NONE;
 
-		if (fieldsColorsOfFiguresOnBoard[sourceX][sourceY] == WHITE)
+		if (colorsOfBoardFigures[sourceX][sourceY] == WHITE)
 		{
 			if (ifXCoordinatesMatch && areYCoordinatesAdjacent && isdestinationFieldEmpty)
 			{
@@ -20,14 +47,14 @@ class Pawn : public Figure
 		return false;
 	}
 
-	bool canMoveBlackPawnHorizontally(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
+	bool canMoveBlackPawnHorizontally(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 
 		bool ifXCoordinatesMatch = sourceX == destinationX;
 		bool areYCoordinatesAdjacent = destinationY == sourceY - 1;
-		bool isdestinationFieldEmpty = fieldsColorsOfFiguresOnBoard[destinationX][destinationY] == NONE;
+		bool isdestinationFieldEmpty = colorsOfBoardFigures[destinationX][destinationY] == NONE;
 
-		if (fieldsColorsOfFiguresOnBoard[sourceX][sourceY] == BLACK)
+		if (colorsOfBoardFigures[sourceX][sourceY] == BLACK)
 		{
 			if (ifXCoordinatesMatch && areYCoordinatesAdjacent && isdestinationFieldEmpty)
 			{
@@ -37,12 +64,13 @@ class Pawn : public Figure
 		return false;
 	}
 
-	bool canMoveWhitePawnDiagonally(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
+	bool canMoveWhitePawnDiagonally(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		bool areXCoordinatesAdjacent = sourceX + 1 == destinationX || sourceX - 1 == destinationX;
 		bool areYCoordinatesAdjacent = destinationY == sourceY + 1;
-		bool isDestinationFieldBlack = fieldsColors[destinationX][destinationY] == BLACK;
-		if (fieldsColorsOfFiguresOnBoard[sourceX][sourceY] == WHITE)
+		bool isDestinationFieldBlack = colorsOfBoardFigures[destinationX][destinationY] == BLACK;
+
+		if (colorsOfBoardFigures[sourceX][sourceY] == WHITE)
 		{
 			if (areXCoordinatesAdjacent && areYCoordinatesAdjacent && isDestinationFieldBlack)
 			{
@@ -52,46 +80,19 @@ class Pawn : public Figure
 		return false;
 	}
 
-	bool canMoveBlackPawnDiagonally(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
+	bool canMoveBlackPawnDiagonally(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		bool areXCoordinatesAdjacent = sourceX + 1 == destinationX || sourceX - 1 == destinationX;
 		bool areYCoordinatesAdjacent = destinationY == sourceY - 1;
-		bool isDestinationFieldWhite = fieldsColors[destinationX][destinationY] == WHITE;
-		if (fieldsColorsOfFiguresOnBoard[sourceX][sourceY] == WHITE)
+		bool isDestinationFieldWhite = colorsOfBoardFigures[destinationX][destinationY] == WHITE;
+
+		if (colorsOfBoardFigures[sourceX][sourceY] == WHITE)
 		{
 			if (areXCoordinatesAdjacent && areYCoordinatesAdjacent && isDestinationFieldWhite)
 			{
 				return true;
 			}
 		}
-		return false;
-	}
-
-public:
-	virtual void printAsLetter(Color fieldColorOfFigure)
-	{
-		(fieldColorOfFigure == WHITE) ? cout << " P " : cout << " p ";
-	}
-
-	virtual bool canMove(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
-	{
-		//off board inputs should be handled elsewhere (before this)
-		//squares with same color should be handled elsewhere (before this)
-		bool canMoveHorizontally = canMoveWhitePawnHorizontally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY) ||
-			                       canMoveBlackPawnHorizontally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY);
-
-		bool canMoveDiagonally = canMoveWhitePawnDiagonally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY) ||
-			                     canMoveBlackPawnDiagonally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY);
-
-		if (canMoveHorizontally || canMoveDiagonally)
-			return true;
-		else 
-			return false;
-	}
-	
-
-	virtual bool isKing()
-	{
 		return false;
 	}
 };

@@ -3,7 +3,27 @@
 
 class Bishop : public Figure
 {
-	bool canMoveDiagonally(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
+public:
+	virtual bool canMove(int sourceX, int sourceY, int destinationX, int destinationY)
+	{
+		if (canMoveDiagonally(sourceX, sourceY, destinationX, destinationY))
+			return true;
+		else
+			return false;
+	}
+
+	virtual void printAsLetter(Colors colorOfTheFigure) override
+	{
+		(colorOfTheFigure == WHITE) ? cout << " B " : cout << " b ";
+	}
+	
+	virtual bool isKing()
+	{
+		return false;
+	}
+
+private:
+	bool canMoveDiagonally(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		if (abs(sourceX - destinationX) == abs(sourceY - destinationY))
 		{
@@ -13,33 +33,13 @@ class Bishop : public Figure
 			int xCoordinate, yCoordinate;
 			for (int i = 1; i < abs(sourceX - destinationX); i++)
 			{
-				xCoordinate = sourceX + xIncrement * i;
-				yCoordinate = sourceY + yIncrement * i;
-				if (fieldsColorsOfFiguresOnBoard[xCoordinate][yCoordinate] != NONE)
+				xCoordinate = sourceX + moveStepByX * i;
+				yCoordinate = sourceY + moveStepByY * i;
+				if (colorsOfBoardFigures[xCoordinate][yCoordinate] != NONE)
 					return false;
 			}
 			return true;
 		}
-		return false;
-	}
-public:
-	virtual void printAsLetter(Color fieldColorOfFigure) override
-	{
-		(fieldColorOfFigure == WHITE) ? cout << " B " : cout << " b ";
-	}
-
-	virtual bool canMove(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
-	{
-		//off board inputs should be handled elsewhere (before this)
-		//squares with same color should be handled elsewhere (before this)
-		if (canMoveDiagonally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY))
-			return true;
-		else
-			return fale;
-	}
-
-	virtual bool isKing()
-	{
 		return false;
 	}
 };

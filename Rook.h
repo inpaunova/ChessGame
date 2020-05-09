@@ -3,14 +3,36 @@
 
 class Rook : public Figure
 {
-	bool canMoveHorizontally(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
+public:
+	bool canMove(int sourceX, int sourceY, int destinationX, int destinationY)
+	{
+		if (canMoveHorizontally(sourceX, sourceY, destinationX, destinationY) ||
+			canMoveVertically(sourceX, sourceY, destinationX, destinationY))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	virtual void printAsLetter(Colors colorOfTheFigure)
+	{
+		(colorOfTheFigure == WHITE) ? cout << " R " : cout << " r ";
+	}
+	
+	virtual bool isKing()
+	{
+		return false;
+	}
+
+private:
+	bool canMoveHorizontally(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		if (sourceX == destinationX && sourceY != destinationY)
 		{
 			int moveStep = (destinationY - sourceY) / (abs(destinationY - sourceY));
-			for (int i = sourceY + moveStep; i != destinationY; i += moveStep)
+			for (int y = sourceY + moveStep; y != destinationY; y += moveStep)
 			{
-				if (fieldsColorsOfFiguresOnBoard[destinationX][i] != NONE)
+				if (colorsOfBoardFigures[destinationX][y] != NONE)
 					return false;
 			}
 			return true;
@@ -18,40 +40,18 @@ class Rook : public Figure
 		return false;
 	}
 
-	bool canMoveVertically(Color ** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
+	bool canMoveVertically(int sourceX, int sourceY, int destinationX, int destinationY)
 	{
 		if (sourceX != destinationY && sourceY == destinationY)
 		{
 			int moveStep = (destinationX - sourceX) / (abs(destinationX - sourceX));
-			for (int i = sourceX + moveStep; i != destinationX; i += moveStep)
+			for (int x = sourceX + moveStep; x != destinationX; x += moveStep)
 			{
-				if (fieldsColorsOfFiguresOnBoard[i][destinationY] != NONE)
+				if (colorsOfBoardFigures[x][destinationY] != NONE)
 					return false;
 			}
 			return true;
 		}
-		return false;
-	}
-public:
-	virtual void printAsLetter(Color fieldColorOfFigure)
-	{
-		(fieldColorOfFigure == WHITE) ? cout << " R " : cout << " r ";
-	}
-
-	bool canMove(Color** fieldsColorsOfFiguresOnBoard, int sourceX, int sourceY, int destinationX, int destinationY)
-	{
-		//off board inputs should be handled elsewhere (before this)
-		//squares with same color should be handled elsewhere (before this)
-		if (canMoveHorizontally(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY) ||
-			canMoveVertically(fieldsColorsOfFiguresOnBoard, sourceX, sourceY, destinationX, destinationY))
-		{
-			return true;
-		}
-		return false;
-	}
-
-	virtual bool isKing()
-	{
 		return false;
 	}
 };

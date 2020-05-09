@@ -133,16 +133,18 @@ bool ChessGame::isGameEnd(int sourceX, int sourceY, int destinationX, int destin
 
 bool ChessGame::canMoveFigure(Field * source, Field * destination)
 {
-	Color ** fieldsColors = takeCurrentColorsOfBoard();
+	Colors ** fieldsColors = takeCurrentColorsOfBoard();
+	source->getFigure()->setColorOfFiguresOnTheBoard(fieldsColors);
 
-	bool canMoveCurrentFigure = source->getFigure()->canMove(fieldsColors, 
-		source->getX(), source->getY(), destination->getX(), destination->getY());
+	bool canMoveCurrentFigure = source->getFigure()->canMove(source->getXcoordinate(),
+		source->getYcoordinate(), destination->getXcoordinate(), destination->getYcoordinate());
 
-	for (int i = 0; i < BOARD_SIZE; i++)
+	for (int i = 0; i < board.getSize(); i++)
 	{
 		delete fieldsColors[i];
 	}
 	delete[] fieldsColors;
+
 	return canMoveCurrentFigure;
 }
 
