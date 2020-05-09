@@ -10,7 +10,7 @@ void playGame(ChessGame game)
 	string yesNoAnswer;
 	while (wantNewGame)
 	{
-		game.setGameBoard();
+		game.board.setGameBoard();
 		while (game.isGamePlaying)
 		{
 			game.playNextTurn();
